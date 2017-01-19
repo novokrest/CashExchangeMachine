@@ -1,5 +1,4 @@
-﻿using CashExchangeMachine.Core.MyPhotoViewer.Core;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System;
 using System.Collections;
 

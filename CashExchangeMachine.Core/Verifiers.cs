@@ -1,49 +1,46 @@
-﻿namespace CashExchangeMachine.Core
+﻿using System;
+
+namespace CashExchangeMachine.Core
 {
-    using System;
-
-    namespace MyPhotoViewer.Core
+    public static class Verifiers
     {
-        public static class Verifiers
+        public static void Assert(bool b)
         {
-            public static void Assert(bool b)
+            if (!b)
             {
-                if (!b)
-                {
-                    throw new Exception();
-                }
+                throw new Exception();
             }
+        }
 
-            public static void Verify(bool b, string messageFormat, params object[] objects)
+        public static void Verify(bool b, string messageFormat, params object[] objects)
+        {
+            if (!b)
             {
-                if (!b)
-                {
-                    throw new Exception(string.Format(messageFormat, objects));
-                }
+                throw new Exception(string.Format(messageFormat, objects));
             }
+        }
 
-            public static void Verify(bool b, Func<Exception> exceptionCreator)
+        public static void Verify(bool b, Func<Exception> exceptionCreator)
+        {
+            if (!b)
             {
-                if (!b)
-                {
-                    throw exceptionCreator();
-                }
+                throw exceptionCreator();
             }
+        }
 
-            public static void ArgVerify(bool b, string paramName, string messageFormat = "", params object[] objects)
+        public static void ArgVerify(bool b, string paramName, string messageFormat = "", params object[] objects)
+        {
+            if (!b)
             {
-                if (!b)
-                {
-                    throw new ArgumentException(string.Format(messageFormat, objects), paramName);
-                }
+                throw new ArgumentException(string.Format(messageFormat, objects), paramName);
             }
+        }
 
-            public static void ArgNullVerify(object arg, string argName)
+        public static void ArgNullVerify(object arg, string argName)
+        {
+            if (arg == null)
             {
-                if (arg == null)
-                {
-                    throw new ArgumentNullException(nameof(argName));
-                }
+                throw new ArgumentNullException(nameof(argName));
             }
         }
     }

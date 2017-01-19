@@ -1,5 +1,4 @@
 ﻿using CashExchangeMachine.Core.Extensions;
-using CashExchangeMachine.Core.MyPhotoViewer.Core;
 using System.Collections.Generic;
 using System.Linq;
 using System;

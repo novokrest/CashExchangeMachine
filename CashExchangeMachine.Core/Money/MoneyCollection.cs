@@ -1,6 +1,4 @@
-﻿using CashExchangeMachine.Core.MyPhotoViewer.Core;
-
-namespace CashExchangeMachine.Core.Money
+﻿namespace CashExchangeMachine.Core.Money
 {
     public class MoneyCollection
     {
