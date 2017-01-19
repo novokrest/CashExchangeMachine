@@ -7,6 +7,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashExchangeMachine.Core", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashExchangeMachine.Core.UnitTests", "CashExchangeMachine.Core.UnitTests\CashExchangeMachine.Core.UnitTests.csproj", "{83B246B5-8281-406D-B46D-7A5EA34BA85C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashExchangeMachine.WebApi", "CashExchangeMachine.WebApi\CashExchangeMachine.WebApi.csproj", "{B3EC4958-51AC-4E8A-A061-CB3D55DF28F3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashExchangeMachine.WebApi.Tests", "CashExchangeMachine.WebApi.Tests\CashExchangeMachine.WebApi.Tests.csproj", "{D9DDCA63-A7D5-4C22-A171-7CC47595AEAD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashExchangeMachine.WebApi.SelfHost", "CashExchangeMachine.WebApi.SelfHost\CashExchangeMachine.WebApi.SelfHost.csproj", "{24E643E9-EE63-4B8F-8223-B8CE97EEC871}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashExchangeMachine.WebApi.Client", "CashExchangeMachine.WebApi.Client\CashExchangeMachine.WebApi.Client.csproj", "{3F2D165B-50CA-428B-8AFB-12DEF4DAD457}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +29,22 @@ Global
 		{83B246B5-8281-406D-B46D-7A5EA34BA85C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83B246B5-8281-406D-B46D-7A5EA34BA85C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83B246B5-8281-406D-B46D-7A5EA34BA85C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3EC4958-51AC-4E8A-A061-CB3D55DF28F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3EC4958-51AC-4E8A-A061-CB3D55DF28F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3EC4958-51AC-4E8A-A061-CB3D55DF28F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3EC4958-51AC-4E8A-A061-CB3D55DF28F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9DDCA63-A7D5-4C22-A171-7CC47595AEAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9DDCA63-A7D5-4C22-A171-7CC47595AEAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9DDCA63-A7D5-4C22-A171-7CC47595AEAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9DDCA63-A7D5-4C22-A171-7CC47595AEAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24E643E9-EE63-4B8F-8223-B8CE97EEC871}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24E643E9-EE63-4B8F-8223-B8CE97EEC871}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24E643E9-EE63-4B8F-8223-B8CE97EEC871}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24E643E9-EE63-4B8F-8223-B8CE97EEC871}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F2D165B-50CA-428B-8AFB-12DEF4DAD457}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F2D165B-50CA-428B-8AFB-12DEF4DAD457}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F2D165B-50CA-428B-8AFB-12DEF4DAD457}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F2D165B-50CA-428B-8AFB-12DEF4DAD457}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
