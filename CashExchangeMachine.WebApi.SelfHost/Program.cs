@@ -12,8 +12,7 @@ namespace CashExchangeMachine.WebApi.SelfHost
         {
             using (WebApp.Start<Startup>(url: ServerUrl))
             {
-                Console.WriteLine("Server running at {0} - press Enter to quit. ", ServerUrl);
-                Console.WriteLine("Press Enter to quit...");
+                Console.WriteLine("Server running at {0} - press Enter to quit... ", ServerUrl);
                 Console.ReadLine();
             }
         }
