@@ -40,7 +40,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CoinEntity.cs" />
+    <Compile Include="CoinEntityLoader.cs" />
+    <Compile Include="SQL\ISqlConnectionProvider.cs" />
+    <Compile Include="MonetaryAggregateEntity.cs" />
+    <Compile Include="MonetaryAggregateEntityLoader.cs" />
+    <Compile Include="NoteEntity.cs" />
+    <Compile Include="NoteEntityLoader.cs" />
+    <Compile Include="SQL\SqlCashRepository.cs" />
+    <Compile Include="ICashRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CashExchangeMachine.Core\CashExchangeMachine.Core.csproj">
+      <Project>{021324A2-444D-4988-A257-A1CA4624F473}</Project>
+      <Name>CashExchangeMachine.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
