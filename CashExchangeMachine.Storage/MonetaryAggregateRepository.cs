@@ -4,6 +4,7 @@ using CashExchangeMachine.Storage.Sql;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System;
 
 namespace CashExchangeMachine.Storage
 {
@@ -51,7 +52,7 @@ namespace CashExchangeMachine.Storage
             using (var sqlCommand = new SqlCommand(CreateInsertQuery(entity), sqlConnection))
             {
                 int rowsAffected = sqlCommand.ExecuteNonQuery();
-                Verifiers.Verify(rowsAffected == 1, "Insertion failed");
+                Verifiers.Verify(rowsAffected == 1, "Money insertion failed");
             }
         }
 
@@ -59,6 +60,24 @@ namespace CashExchangeMachine.Storage
         {
             return $@"UPDATE {_tableName} SET [Count] = [Count] + {entity.Count} 
                                           WHERE [Nominal] = {entity.Nominal} AND Currency = '{entity.Currency}'";
+        }
+
+
+        // TODO: MonetaryAggregateEntity -> MonetaryAggregateDiff, choose more evident names for methods
+        public void Delete(TMonetaryAggregateEntity entity)
+        {
+            using (var connection = _sqlConnectionProvider.OpenSqlConnection())
+            using (var command = new SqlCommand(CreateDeleteQuery(entity), connection))
+            {
+                int rowsAffected = command.ExecuteNonQuery();
+                Verifiers.Verify(rowsAffected == 1, "Money deletion failed");
+            }
+        }
+
+        private string CreateDeleteQuery(TMonetaryAggregateEntity entity)
+        {
+            return $@"UPDATE {_tableName} SET [Count] = [Count] - {entity.Count}
+                      WHERE [Nominal] = {entity.Nominal} AND Currency = '{entity.Currency}'";
         }
 
         protected abstract TMonetaryAggregateEntity CreateEmptyMonetaryAggregate();

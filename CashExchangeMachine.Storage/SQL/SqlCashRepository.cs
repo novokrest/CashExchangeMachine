@@ -1,5 +1,7 @@
-﻿using CashExchangeMachine.Core.Money;
+﻿using CashExchangeMachine.Core.Extensions;
+using CashExchangeMachine.Core.Money;
 using System;
+using System.Collections.Generic;
 
 namespace CashExchangeMachine.Storage.Sql
 {
@@ -63,16 +65,8 @@ namespace CashExchangeMachine.Storage.Sql
             // TODO: create repository only one time, cash and then reuse
             var noteRepository = new NoteRepository(_sqlConnectionProvider);
 
-            // TODO: create more friendly API for Notes class
-            foreach (var noteNominalCountPair in notes)
+            foreach (var noteEntity in ConvertToNoteEntities(notes, currency))
             {
-                var noteEntity = new NoteEntity
-                {
-                    Nominal = noteNominalCountPair.Key,
-                    Currency = currency.Name,
-                    Count = noteNominalCountPair.Value
-                };
-
                 noteRepository.Insert(noteEntity);
             }
         }
@@ -99,7 +93,61 @@ namespace CashExchangeMachine.Storage.Sql
         public void RemoveMoney(MoneyCollection money)
         {
             EnsureMoneyLoaded();
-            throw new NotImplementedException();
+            RemoveNotes(money.Notes, money.Currency);
+            RemoveCoins(money.Coins, money.Currency);
+        }
+
+        private void RemoveNotes(Notes notes, Currency currency)
+        {
+            // TODO: !!!!
+            var noteRepository = new NoteRepository(_sqlConnectionProvider);
+
+            foreach (var noteEntity in ConvertToNoteEntities(notes, currency))
+            {
+                noteRepository.Delete(noteEntity);
+            }
+        }
+
+        private void RemoveCoins(Coins coins, Currency currency)
+        {
+            var coinRepository = new CoinRepository(_sqlConnectionProvider);
+
+            foreach (var coinEntity in ConvertToCoinEntities(coins, currency))
+            {
+                coinRepository.Delete(coinEntity);
+            }
+        }
+
+        private IEnumerable<NoteEntity> ConvertToNoteEntities(Notes notes, Currency currency)
+        {
+            // TODO: create more friendly API for Notes class
+            foreach (var noteNominalCountPair in notes)
+            {
+                var noteEntity = new NoteEntity
+                {
+                    Nominal = noteNominalCountPair.Key,
+                    Currency = currency.Name,
+                    Count = noteNominalCountPair.Value
+                };
+
+                yield return noteEntity;
+            }
+        }
+
+        private IEnumerable<CoinEntity> ConvertToCoinEntities(Coins coins, Currency currency)
+        {
+            // TODO: create more friendly API for Notes class
+            foreach (var coinNominalCountPair in coins)
+            {
+                var coinEntity = new CoinEntity
+                {
+                    Nominal = coinNominalCountPair.Key,
+                    Currency = currency.Name,
+                    Count = coinNominalCountPair.Value
+                };
+
+                yield return coinEntity;
+            }
         }
     }
 }
