@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("CashExchangeMachine.Storage")]
+[assembly: AssemblyTitle("CashExchangeMachine.Storage.IntegrationTests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("CashExchangeMachine.Storage")]
+[assembly: AssemblyProduct("CashExchangeMachine.Storage.IntegrationTests")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("37fc7dcf-19c9-4806-b23d-7bb6cbe12b80")]
+[assembly: Guid("75da7e20-73b4-4bd1-9f2f-8ef70a975249")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -34,6 +34,3 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-#if DEBUG
-[assembly: InternalsVisibleTo("CashExchangeMachine.Storage.IntegrationTests")]
-#endif // DEBUG
