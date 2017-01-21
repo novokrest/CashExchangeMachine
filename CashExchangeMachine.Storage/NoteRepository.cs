@@ -3,11 +3,11 @@ using CashExchangeMachine.Storage.Sql;
 
 namespace CashExchangeMachine.Storage
 {
-    internal class NoteEntityLoader : MonetaryAggregateEntityLoader<NoteEntity>
+    internal class NoteRepository : MonetaryAggregateRepository<NoteEntity>
     {
         private const string NoteTableName = "Notes";
 
-        public NoteEntityLoader(ISqlConnectionProvider sqlConnectionProvider) 
+        public NoteRepository(ISqlConnectionProvider sqlConnectionProvider) 
             : base(sqlConnectionProvider, NoteTableName)
         {
         }

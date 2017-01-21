@@ -2,11 +2,11 @@
 
 namespace CashExchangeMachine.Storage
 {
-    internal class CoinEntityLoader : MonetaryAggregateEntityLoader<CoinEntity>
+    internal class CoinRepository : MonetaryAggregateRepository<CoinEntity>
     {
         private const string CoinTableName = "Coins";
 
-        public CoinEntityLoader(ISqlConnectionProvider sqlConnectionProvider) 
+        public CoinRepository(ISqlConnectionProvider sqlConnectionProvider) 
             : base(sqlConnectionProvider, CoinTableName)
         {
         }

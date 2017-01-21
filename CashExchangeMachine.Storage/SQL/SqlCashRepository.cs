@@ -35,7 +35,7 @@ namespace CashExchangeMachine.Storage.Sql
 
         private void LoadNotes(MoneyCollection moneyCollection)
         {
-            var noteLoader = new NoteEntityLoader(_sqlConnectionProvider);
+            var noteLoader = new NoteRepository(_sqlConnectionProvider);
             foreach (var noteEntity in noteLoader.Load(moneyCollection.Currency))
             {
                 moneyCollection.Notes.Add(noteEntity.Nominal, noteEntity.Count);
@@ -44,7 +44,7 @@ namespace CashExchangeMachine.Storage.Sql
 
         private void LoadCoins(MoneyCollection moneyCollection)
         {
-            var coinLoader = new CoinEntityLoader(_sqlConnectionProvider);
+            var coinLoader = new CoinRepository(_sqlConnectionProvider);
             foreach (var coinEntity in coinLoader.Load(moneyCollection.Currency))
             {
                 moneyCollection.Coins.Add(coinEntity.Nominal, coinEntity.Count);
@@ -54,7 +54,46 @@ namespace CashExchangeMachine.Storage.Sql
         public void AddMoney(MoneyCollection money)
         {
             EnsureMoneyLoaded();
-            throw new NotImplementedException();
+            AddNotes(money.Notes, money.Currency);
+            AddCoins(money.Coins, money.Currency);
+        }
+
+        private void AddNotes(Notes notes, Currency currency)
+        {
+            // TODO: create repository only one time, cash and then reuse
+            var noteRepository = new NoteRepository(_sqlConnectionProvider);
+
+            // TODO: create more friendly API for Notes class
+            foreach (var noteNominalCountPair in notes)
+            {
+                var noteEntity = new NoteEntity
+                {
+                    Nominal = noteNominalCountPair.Key,
+                    Currency = currency.Name,
+                    Count = noteNominalCountPair.Value
+                };
+
+                noteRepository.Insert(noteEntity);
+            }
+        }
+
+        private void AddCoins(Coins coins, Currency currency)
+        {
+            // TODO: create repository only one time, cash and then reuse
+            var coinRepository = new CoinRepository(_sqlConnectionProvider);
+
+            // TODO: create more friendly API for Coins class
+            foreach (var coinNominalCountPair in coins)
+            {
+                var coinEntity = new CoinEntity
+                {
+                    Nominal = coinNominalCountPair.Key,
+                    Currency = currency.Name,
+                    Count = coinNominalCountPair.Value
+                };
+
+                coinRepository.Insert(coinEntity);
+            }
         }
 
         public void RemoveMoney(MoneyCollection money)
