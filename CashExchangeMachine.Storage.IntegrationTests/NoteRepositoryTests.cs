@@ -56,6 +56,21 @@ namespace CashExchangeMachine.Storage.IntegrationTests
             Assert.IsTrue(notesAfterInsertion[1].Count == notesBeforeInsertion[1].Count + 10);
         }
 
+        [Test]
+        public void Given_Notes_Should_RemoveNotesSuccessfuly()
+        {
+            var noteRepository = GetNoteRepository();
+            // TODO: may be pass just Currency name ?
+            var notesBeforeInsertion = LoadNotes(noteRepository);
+
+            var note = new NoteEntity { Nominal = 1, Currency = Currency, Count = 10 };
+            noteRepository.Delete(note);
+
+            var notesAfterInsertion = LoadNotes(noteRepository);
+
+            Assert.IsTrue(notesAfterInsertion[1].Count == notesBeforeInsertion[1].Count - 10);
+        }
+
         private NoteRepository GetNoteRepository()
         {
             var sqlConnectionProvider = new SqlConnectionProvider(ConnectionString);
