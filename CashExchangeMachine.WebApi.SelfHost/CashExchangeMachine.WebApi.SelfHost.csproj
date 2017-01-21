@@ -85,6 +85,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CashExchangeMachine.Storage\CashExchangeMachine.Storage.csproj">
+      <Project>{37FC7DCF-19C9-4806-B23D-7BB6CBE12B80}</Project>
+      <Name>CashExchangeMachine.Storage</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CashExchangeMachine.WebApi\CashExchangeMachine.WebApi.csproj">
       <Project>{b3ec4958-51ac-4e8a-a061-cb3d55df28f3}</Project>
       <Name>CashExchangeMachine.WebApi</Name>

@@ -1,14 +1,31 @@
 ﻿using System;
 using System.Configuration;
 using Microsoft.Owin.Hosting;
+using CashExchangeMachine.Storage.Sql;
 
 namespace CashExchangeMachine.WebApi.SelfHost
 {
     internal static class Program
     {
         private static readonly string ServerUrl = ConfigurationManager.AppSettings["server"];
+        private static readonly string SqlConnectionString = ConfigurationManager.ConnectionStrings["sql"].ConnectionString;
 
         public static void Main(string[] args)
+        {
+            CheckSqlConnection();
+            StartServer();
+        }
+
+        private static void CheckSqlConnection()
+        {
+            var sqlConnectionProvider = new SqlConnectionProvider(SqlConnectionString);
+            using (var sqlConnection = sqlConnectionProvider.OpenSqlConnection())
+            {
+                sqlConnection.Open();
+            }
+        }
+
+        private static void StartServer()
         {
             using (WebApp.Start<Startup>(url: ServerUrl))
             {
