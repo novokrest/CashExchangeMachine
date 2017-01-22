@@ -48,7 +48,15 @@ namespace CashExchangeMachine.WebApi.Controllers
         [Route("exchange")]
         public IHttpActionResult Exchange()
         {
-            return Ok("Inside Exchange");
+            try
+            {
+                _cashExchangeMachine.ConfirmExchange();
+                return Ok("Inside Exchange");
+            }
+            catch (InvalidOperationException exception)
+            {
+                return BadRequest(exception.Message);
+            }
         }
     }
 }

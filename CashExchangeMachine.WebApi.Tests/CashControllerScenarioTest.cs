@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using CashExchangeMachine.Core.Money;
 using CashExchangeMachine.WebApi.Models;
@@ -21,15 +22,13 @@ namespace CashExchangeMachine.WebApi.Tests
                                .AssertNoNotes();
         }
 
-        //[Test]
-        //public void Given_NoMoneyInserted_Then_MakeExchangeRequest_Should_ReturnErrorStatusCode()
-        //{
-        //    SetNoMoney();
+        [Test]
+        public void Given_NoMoneyInserted_Then_MakeExchangeRequest_Should_ReturnErrorStatusCode()
+        {
+            SetNoMoney().AssertSuccess();
 
-        //    var response = MakeExchangeRequest();
-
-        //    Assert.IsFalse(response.IsSuccessStatusCode);
-        //}
+            Exchange().AssertFailed(HttpStatusCode.BadRequest);
+        }
 
         //[Test]
         //public void Given_EmptyCashState_And_NoteInserted_Then_MakeExchangeRequest_Should_ReturnInsertedMoney()
@@ -105,9 +104,9 @@ namespace CashExchangeMachine.WebApi.Tests
 
         }
 
-        private HttpResponseMessage MakeExchangeRequest()
+        private HttpResponseMessage Exchange()
         {
-            throw new NotImplementedException();
+            return HttpClient.SendAsync(CreateRequest("api/cashmachine/exchange", HttpMethod.Post)).Result;
         }
 
         private HttpResponseMessage SetNoMoney()

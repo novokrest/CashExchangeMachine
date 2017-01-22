@@ -1,5 +1,7 @@
-﻿using System.Net.Http;
+﻿using System.Net;
+using System.Net.Http;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization.Formatters;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
@@ -13,9 +15,13 @@ namespace CashExchangeMachine.WebApi.Tests.Extensions
             return response;
         }
 
-        public static HttpResponseMessage AssertFailed(this HttpResponseMessage response)
+        public static HttpResponseMessage AssertFailed(this HttpResponseMessage response, HttpStatusCode? expectedStatusCode = null)
         {
             Assert.IsFalse(response.IsSuccessStatusCode);
+            if (expectedStatusCode.HasValue)
+            {
+                Assert.IsTrue(response.StatusCode == HttpStatusCode.BadRequest);
+            }
             return response;
         }
 
