@@ -30,6 +30,17 @@ namespace CashExchangeMachine.WebApi.Tests
             Exchange().AssertFailed(HttpStatusCode.BadRequest);
         }
 
+        [Test]
+        public void Given_NoMoneyState_Then_SetSomeMoney_Then_GetAvailableMoney_Should_ReturnAddedMoney()
+        {
+            SetNoMoney().AssertSuccess();
+            SetMoney(new MoneyBuilder(Currency.Dollar).AddCoins(1, 10).AddNotes(5, 50).Build()).AssertSuccess();
+            GetAvailableMoney().AssertSuccess()
+                               .ExtractJson<MoneyResult>()
+                               .AssertHasCoins(1, 10)
+                               .AssertHasNotes(5, 50);
+        }
+
         //[Test]
         //public void Given_EmptyCashState_And_NoteInserted_Then_MakeExchangeRequest_Should_ReturnInsertedMoney()
         //{
@@ -112,7 +123,12 @@ namespace CashExchangeMachine.WebApi.Tests
         private HttpResponseMessage SetNoMoney()
         {
             var money = new MoneyBuilder(Currency.Dollar).Build();
-            return HttpClient.SendAsync(CreateRequest("api/cashmachine/money", HttpMethod.Post, money)).Result;
+            return SetMoney(money);
+        }
+
+        private HttpResponseMessage SetMoney(MoneyCollection money)
+        {
+            return HttpClient.SendAsync(CreateRequest("api/cashmachine/money", HttpMethod.Post, MoneyResult.CreateFrom(money))).Result;
         }
 
         private HttpResponseMessage GetAvailableMoney()

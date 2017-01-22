@@ -122,6 +122,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\MoneyResult.cs" />
+    <Compile Include="Models\MoneyResultExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

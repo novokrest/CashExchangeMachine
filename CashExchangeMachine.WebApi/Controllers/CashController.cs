@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Http;
 using CashExchangeMachine.Core.Machine;
+using CashExchangeMachine.Core.Money;
 using CashExchangeMachine.WebApi.Models;
 
 namespace CashExchangeMachine.WebApi.Controllers
@@ -25,9 +26,18 @@ namespace CashExchangeMachine.WebApi.Controllers
 
         [HttpPost]
         [Route("money")]
-        public IHttpActionResult SetAvailableCash()
+        public IHttpActionResult SetAvailableCash([FromBody]MoneyResult moneyResult)
         {
-            return Ok("Inside SetAvailableCash");
+            try
+            {
+                _cashExchangeMachine.SetMoney(moneyResult.ToMoneyCollection());
+                return Ok();
+            }
+            catch (InvalidOperationException exception)
+            {
+                return BadRequest(exception.Message);
+            }
+            
         }
 
         [HttpPut]
@@ -51,7 +61,7 @@ namespace CashExchangeMachine.WebApi.Controllers
             try
             {
                 _cashExchangeMachine.ConfirmExchange();
-                return Ok("Inside Exchange");
+                return Ok();
             }
             catch (InvalidOperationException exception)
             {
