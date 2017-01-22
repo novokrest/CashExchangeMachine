@@ -4,10 +4,15 @@ namespace CashExchangeMachine.Core
 {
     public static class Verifiers
     {
-        public static void Assert(bool b)
+        public static void Assert(bool b, string message = null, params object[] args)
         {
             if (!b)
             {
+                if (message != null)
+                {
+                    throw new Exception(string.Format(message, args));
+                }
+
                 throw new Exception();
             }
         }

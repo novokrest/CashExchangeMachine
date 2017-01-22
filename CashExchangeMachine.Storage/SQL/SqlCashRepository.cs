@@ -5,32 +5,29 @@ namespace CashExchangeMachine.Storage.Sql
 {
     public class SqlCashRepository : ICashRepository
     {
+        private readonly IDictionary<Currency, MoneyCollection> _totalMoney = new Dictionary<Currency, MoneyCollection>();
         private readonly ISqlConnectionProvider _sqlConnectionProvider;
-        private readonly Currency _currency;
-
-        private MoneyCollection _moneyCollection;
         
-        public SqlCashRepository(ISqlConnectionProvider sqlConnectionProvider, Currency currency)
+        public SqlCashRepository(ISqlConnectionProvider sqlConnectionProvider)
         {
             _sqlConnectionProvider = sqlConnectionProvider;
-            _currency = currency;
         }
 
-        public MoneyCollection LoadMoney()
+        public MoneyCollection LoadMoney(Currency currency)
         {
-            EnsureMoneyLoaded();
-            return _moneyCollection;
+            EnsureMoneyLoaded(currency);
+            return _totalMoney[currency];
         }
 
-        private void EnsureMoneyLoaded()
+        private void EnsureMoneyLoaded(Currency currency)
         {
-            if (_moneyCollection != null) { return; }
-
-            var moneyCollection = MoneyCollection.Create(_currency);
-            LoadNotes(moneyCollection);
-            LoadCoins(moneyCollection);
-
-            _moneyCollection = moneyCollection;
+            if (!_totalMoney.ContainsKey(currency))
+            {
+                var money = MoneyCollection.Create(currency);
+                LoadNotes(money);
+                LoadCoins(money);
+                _totalMoney.Add(currency, money);
+            }
         }
 
         private void LoadNotes(MoneyCollection moneyCollection)
@@ -53,7 +50,7 @@ namespace CashExchangeMachine.Storage.Sql
 
         public void AddMoney(MoneyCollection money)
         {
-            EnsureMoneyLoaded();
+            EnsureMoneyLoaded(money.Currency);
             AddNotes(money.Notes, money.Currency);
             AddCoins(money.Coins, money.Currency);
         }
@@ -90,9 +87,15 @@ namespace CashExchangeMachine.Storage.Sql
 
         public void RemoveMoney(MoneyCollection money)
         {
-            EnsureMoneyLoaded();
+            EnsureMoneyLoaded(money.Currency);
             RemoveNotes(money.Notes, money.Currency);
             RemoveCoins(money.Coins, money.Currency);
+        }
+
+        public void SetMoney(MoneyCollection money)
+        {
+            RemoveMoney(LoadMoney(money.Currency));
+            AddMoney(money);
         }
 
         private void RemoveNotes(Notes notes, Currency currency)

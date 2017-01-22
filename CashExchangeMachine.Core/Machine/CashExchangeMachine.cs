@@ -5,29 +5,37 @@ namespace CashExchangeMachine.Core.Machine
 {
     public interface ICashExchangeMachine
     {
-        MoneyCollection Money { get; }
+        void SetMoney(MoneyCollection money);
+        MoneyCollection GetAvailableMoney();
+
         void InsertNote(int nominal);
         void InsertCoin(int nominal);
 
         IExchangeResult ConfirmExchange();
     }
 
-    internal class CashExchangeMachine : ICashExchangeMachine, IMachineStateOwner
+    public class CashExchangeMachine : ICashExchangeMachine, IMachineStateOwner
     {
-        private readonly ICashRepository _cashRepository;
         private IMachineState _state;
 
-        public CashExchangeMachine(ICashRepository cashRepository)
+        public CashExchangeMachine(ICashRepository cashRepository, Currency currency)
         {
-            _cashRepository = cashRepository;
-            _state = new FreshMachineState(this, Money);
+            _state = new FreshMachineState(this, cashRepository, currency);
         }
 
-        public MoneyCollection Money => _cashRepository.LoadMoney();
-
-        public void ChangeState(IMachineState state)
+        void IMachineStateOwner.ChangeState(IMachineState state)
         {
             _state = state;
+        }
+
+        public void SetMoney(MoneyCollection money)
+        {
+            _state.SetMoney(money);
+        }
+
+        public MoneyCollection GetAvailableMoney()
+        {
+            return _state.GetAvailableMoney();
         }
 
         public void InsertNote(int nominal)

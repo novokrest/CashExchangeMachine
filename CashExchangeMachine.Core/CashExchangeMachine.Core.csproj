@@ -52,9 +52,9 @@
     <Compile Include="Machine\ExchangeResult.cs" />
     <Compile Include="Machine\IMachineState.cs" />
     <Compile Include="Machine\IMachineStateOwner.cs" />
+    <Compile Include="Machine\MachineStateOwnerExtension.cs" />
     <Compile Include="Machine\States\CoinsInsertionState.cs" />
     <Compile Include="Machine\States\FreshMachineState.cs" />
-    <Compile Include="Machine\States\MachineState.cs" />
     <Compile Include="Machine\States\NotesInsertionState.cs" />
     <Compile Include="Money\Coins.cs" />
     <Compile Include="Money\Currency.cs" />

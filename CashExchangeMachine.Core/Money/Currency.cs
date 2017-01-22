@@ -4,7 +4,7 @@ namespace CashExchangeMachine.Core.Money
 {
     public class Currency
     {
-        public static Currency Dollar = Currency.Create("Dollar", "$", 100, new[] { 1, 2, 5, 10 }, new[] { 1, 10, 25, 50 });
+        public static Currency Dollar = Currency.Create("Dollar", "$", 100, new[] { 1, 2, 5, 10 }, new[] { 1, 5, 10, 25 });
 
         private static Currency Create(string name, string symbol, int fractions,
                                       IReadOnlyCollection<int> noteNominals, IReadOnlyCollection<int> coinNominals)

@@ -3,24 +3,42 @@ using System;
 
 namespace CashExchangeMachine.Core.Machine.States
 {
-    internal class FreshMachineState : MachineStateBase
+    internal class FreshMachineState : IMachineState
     {
-        public FreshMachineState(IMachineStateOwner owner, MoneyCollection money) 
-            : base(owner, money)
+        private readonly IMachineStateOwner _owner;
+        private readonly ICashRepository _cashRepository;
+        private readonly Currency _currency;
+
+        public FreshMachineState(IMachineStateOwner owner, ICashRepository cashRepository, Currency currency)
         {
+            _owner = owner;
+            _cashRepository = cashRepository;
+            _currency = currency;
         }
 
-        public override void InsertNote(int nominal)
+        public MoneyCollection GetAvailableMoney()
         {
-            ChangeOwnerState<NotesInsertionState>().InsertNote(nominal);
+            return _cashRepository.LoadMoney(_currency);
         }
 
-        public override void InsertCoin(int nominal)
+        public void SetMoney(MoneyCollection money)
         {
-            ChangeOwnerState<CoinsInsertionState>().InsertCoin(nominal);
+            _cashRepository.SetMoney(money);
         }
 
-        public override IExchangeResult Exchange()
+        public void InsertNote(int nominal)
+        {
+            _owner.ChangeState<NotesInsertionState>(_cashRepository, _currency)
+                  .InsertNote(nominal);
+        }
+
+        public void InsertCoin(int nominal)
+        {
+            _owner.ChangeState<CoinsInsertionState>(_cashRepository, _currency)
+                  .InsertCoin(nominal);
+        }
+
+        public IExchangeResult Exchange()
         {
             throw new InvalidOperationException("No money has been inserted");
         }

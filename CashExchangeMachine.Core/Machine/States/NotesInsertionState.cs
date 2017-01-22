@@ -6,52 +6,70 @@ using System;
 
 namespace CashExchangeMachine.Core.Machine.States
 {
-    internal class NotesInsertionState : MachineStateBase
+    internal class NotesInsertionState : IMachineState
     {
+        private readonly IMachineStateOwner _owner;
+        private readonly ICashRepository _cashRepository;
+        private readonly Currency _currency;
         private readonly Notes _insertedNotes;
 
-        public NotesInsertionState(IMachineStateOwner owner, MoneyCollection moneyCollection) 
-            : base(owner, moneyCollection)
+        public NotesInsertionState(IMachineStateOwner owner, ICashRepository cashRepository, Currency currency)
         {
-            _insertedNotes = Notes.Create(Money.Currency);
+            _owner = owner;
+            _cashRepository = cashRepository;
+            _currency = currency;
+            _insertedNotes = Notes.Create(currency);
         }
 
-        public override void InsertNote(int nominal)
+        public void SetMoney(MoneyCollection money)
+        {
+            throw new InvalidOperationException("Failed to set available money: complete notes exchange");
+        }
+
+        public MoneyCollection GetAvailableMoney()
+        {
+            throw new InvalidOperationException("Failed to get available money: complete notes exchange");
+        }
+
+        public void InsertNote(int nominal)
         {
             _insertedNotes.Add(nominal, 1);
         }
 
-        public override void InsertCoin(int nominal)
+        public void InsertCoin(int nominal)
         {
             throw new InvalidOperationException("Failed to insert coin! You can insert one more note or confirm exchange.");
         }
 
-        public override IExchangeResult Exchange()
+        public IExchangeResult Exchange()
         {
-            ICountableCollection<int> exchangeResult;
-            int valueForExchange = _insertedNotes.Total * Money.Currency.UnitFractions;
+            var returnedMoney = MoneyCollection.Create(_currency);
+            bool success = TryExchange(returnedMoney);
 
-            var greedyExchanger = new GreedyExchanger();
-            if (greedyExchanger.TryExchange(Money.Coins, valueForExchange, out exchangeResult))
-            {
-                var exchangedMoney = MoneyCollection.Create(Money.Currency);
-                exchangedMoney.Coins.Add(exchangeResult);
-
-                return new ExchangeResult
-                {
-                    Success = true,
-                    Money = exchangedMoney
-                };
-            }
-
-            var insertedMoney = MoneyCollection.Create(Money.Currency);
-            insertedMoney.Notes.Add(_insertedNotes);
+            _owner.ChangeState<FreshMachineState>(_cashRepository, _currency);
 
             return new ExchangeResult
             {
-                Success = false,
-                Money = insertedMoney
+                Success = success,
+                Money = returnedMoney
             };
+        }
+
+        private bool TryExchange(MoneyCollection resultMoney)
+        {
+            int valueForExchange = _insertedNotes.Total * _currency.UnitFractions;
+            var money = _cashRepository.LoadMoney(_currency);
+
+            ICountableCollection<int> exchangeResult;
+            var greedyExchanger = new GreedyExchanger();
+            if (greedyExchanger.TryExchange(money.Coins, valueForExchange, out exchangeResult))
+            {
+                resultMoney.Coins.Add(exchangeResult);
+                return true;
+            }
+
+            resultMoney.Notes.Add(_insertedNotes);
+            return false;
         }
 
         //TODO: Notes and Coins should store Currency

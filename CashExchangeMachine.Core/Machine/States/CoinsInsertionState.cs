@@ -6,53 +6,74 @@ using System;
 
 namespace CashExchangeMachine.Core.Machine.States
 {
-    internal class CoinsInsertionState : MachineStateBase
+    internal class CoinsInsertionState : IMachineState
     {
-        private readonly Coins _insertedCoins; 
+        private readonly IMachineStateOwner _owner;
+        private readonly ICashRepository _cashRepository;
+        private readonly Currency _currency;
 
-        public CoinsInsertionState(IMachineStateOwner owner, MoneyCollection moneyCollection) 
-            : base(owner, moneyCollection)
+        private readonly Coins _insertedCoins;
+
+        public CoinsInsertionState(IMachineStateOwner owner, ICashRepository cashRepository, Currency currency)
         {
-            _insertedCoins = Coins.Create(Money.Currency);
+            _owner = owner;
+            _cashRepository = cashRepository;
+            _currency = currency;
+            _insertedCoins = Coins.Create(currency);
         }
 
-        public override void InsertNote(int nominal)
+        private MoneyCollection Money => _cashRepository.LoadMoney(_currency);
+
+        public void SetMoney(MoneyCollection money)
         {
-            throw new InvalidOperationException("Failed to insert note! You can insert one more coin or confirm exchange.");
+            throw new InvalidOperationException("Failed to set available money: complete coins exchange");
         }
 
-        public override void InsertCoin(int nominal)
+        public MoneyCollection GetAvailableMoney()
+        {
+            throw new InvalidOperationException("Failed to get available money: complete notes exchange");
+        }
+
+        public void InsertNote(int nominal)
+        {
+            throw new InvalidOperationException(
+                "Failed to insert note! You can insert one more coin or confirm exchange.");
+        }
+
+        public void InsertCoin(int nominal)
         {
             _insertedCoins.Add(nominal, 1);
         }
 
-        public override IExchangeResult Exchange()
+        public IExchangeResult Exchange()
         {
-            int valueForExchange = _insertedCoins.Total;
-            ICountableCollection<int> exchangeResult = null;
+            var resultMoney = MoneyCollection.Create(_currency);
+            bool success = TryExchange(resultMoney);
 
-            var greedyExchanger = new GreedyExchanger();
-            if (greedyExchanger.TryExchange(new DecreasingIntegerCollectionMultiplier(Money.Notes, Money.Currency.UnitFractions), 
-                                            valueForExchange, out exchangeResult))
-            {
-                var exchangedMoney = MoneyCollection.Create(Money.Currency);
-                exchangedMoney.Notes.Add(exchangeResult.Select(nominal => nominal / Money.Currency.UnitFractions));
-
-                return new ExchangeResult
-                {
-                    Success = true,
-                    Money = exchangedMoney
-                };
-            }
-
-            var insertedMoney = MoneyCollection.Create(Money.Currency);
-            insertedMoney.Coins.Add(_insertedCoins);
+            _owner.ChangeState<FreshMachineState>(_cashRepository, _currency);
 
             return new ExchangeResult
             {
-                Success = false,
-                Money = insertedMoney
+                Success = success,
+                Money = resultMoney
             };
         }
+
+        private bool TryExchange(MoneyCollection resultMoney)
+        {
+            ICountableCollection<int> exchangeResult = null;
+            var greedyExchanger = new GreedyExchanger();
+
+            if (greedyExchanger.TryExchange(new DecreasingIntegerCollectionMultiplier(Money.Notes, _currency.UnitFractions),
+                                            _insertedCoins.Total, out exchangeResult))
+            {
+                resultMoney.Notes.Add(exchangeResult.Select(nominal => nominal/Money.Currency.UnitFractions));
+                return true;
+            }
+
+            resultMoney.Coins.Add(_insertedCoins);
+            return false;
+        }
+
     }
 }
