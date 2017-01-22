@@ -20,7 +20,7 @@ namespace CashExchangeMachine.WebApi.SelfHost.Ninject
                                           .WithConstructorArgument("sqlConnectionString", 
                                                                    ConfigurationManager.ConnectionStrings["sql"].ConnectionString);
             Bind<ICashRepository>().To<SqlCashRepository>();
-            Bind<ICashExchangeMachine>().To<Core.Machine.CashExchangeMachine>();
+            Bind<ICashExchangeMachine>().To<Core.Machine.CashExchangeMachine>().InSingletonScope();
         }
     }
 }

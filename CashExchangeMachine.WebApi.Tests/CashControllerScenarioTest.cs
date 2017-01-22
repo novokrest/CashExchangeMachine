@@ -11,6 +11,7 @@ namespace CashExchangeMachine.WebApi.Tests
     [TestFixture]
     internal class CashControllerScenarioTest : ControllerBaseTest
     {
+        // TODO: Now works only if in table exists rows
         [Test]
         public void Given_SetNoMoney_Then_GetAvailableMoney_Should_ReturnNoMoney_With_SuccessStatus()
         {
@@ -41,20 +42,22 @@ namespace CashExchangeMachine.WebApi.Tests
                                .AssertHasNotes(5, 50);
         }
 
-        //[Test]
-        //public void Given_EmptyCashState_And_NoteInserted_Then_MakeExchangeRequest_Should_ReturnInsertedMoney()
-        //{
-        //    SetNoMoney();
-        //    InsertNote(1);
+        [Test]
+        public void Given_EmptyCashState_And_NoteInserted_Then_MakeExchangeRequest_Should_ReturnInsertedMoney()
+        {
+            SetNoMoney().AssertSuccess();
+            InsertNote(1).AssertSuccess();
+            InsertNote(2).AssertSuccess();
+            InsertNote(1).AssertSuccess();
 
-        //    var response = MakeExchangeRequest();
-        //    Assert.IsFalse(response.IsSuccessStatusCode);
-
-        //    MoneyResult result = Extract<MoneyResult>(response);
-        //    Assert.IsEmpty(result.Coins);
-        //    Assert.IsNotEmpty(result.Notes);
-        //    Assert.IsTrue(result.HasNotes(1, 1));
-        //}
+            Exchange().AssertFailed(HttpStatusCode.Forbidden)
+                      .ExtractJson<MoneyResult>()
+                      .AssertNoCoins()
+                      .AssertHasNotes(1, 2)
+                      .AssertHasNotes(2, 1)
+                      .AssertHasNotes(5, 0)
+                      .AssertHasNotes(10, 0);
+        }
 
         //[Test]
         //public void Given_EmptyCashState_And_CoinInserted_Then_MakeExchangeRequest_Should_ResturnInsertedMoney()
@@ -134,6 +137,16 @@ namespace CashExchangeMachine.WebApi.Tests
         private HttpResponseMessage GetAvailableMoney()
         {
             return HttpClient.GetAsync("api/cashmachine/money").Result;
+        }
+
+        private HttpResponseMessage InsertNote(int nominal)
+        {
+            return HttpClient.SendAsync(CreateRequest($@"api/cashmachine/insert/note/{nominal}", HttpMethod.Put)).Result;
+        }
+
+        private HttpResponseMessage InsertCoin(int nominal)
+        {
+            return HttpClient.SendAsync(CreateRequest($@"api/cashmachine/insert/coin/{nominal}", HttpMethod.Put)).Result;
         }
 
         private T Extract<T>(HttpResponseMessage response)

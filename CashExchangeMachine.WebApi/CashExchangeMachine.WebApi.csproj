@@ -116,11 +116,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\ApiControllerEx.cs" />
     <Compile Include="Controllers\CashController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="HttpActionResults\Forbidden.cs" />
     <Compile Include="Models\MoneyResult.cs" />
     <Compile Include="Models\MoneyResultExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -157,7 +159,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>58215</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

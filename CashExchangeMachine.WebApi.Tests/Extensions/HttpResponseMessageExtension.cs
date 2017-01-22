@@ -20,7 +20,7 @@ namespace CashExchangeMachine.WebApi.Tests.Extensions
             Assert.IsFalse(response.IsSuccessStatusCode);
             if (expectedStatusCode.HasValue)
             {
-                Assert.IsTrue(response.StatusCode == HttpStatusCode.BadRequest);
+                Assert.AreEqual(expectedStatusCode, response.StatusCode);
             }
             return response;
         }

@@ -8,6 +8,9 @@ using System.Web.Http;
 
 namespace CashExchangeMachine.WebApi.SelfHost.Ninject
 {
+    /// <summary>
+    /// TODO: Remove this and other 'simple's
+    /// </summary>
     public class SimpleController : ApiController
     {
         private readonly ISimpleDependency _simpleDependency;
