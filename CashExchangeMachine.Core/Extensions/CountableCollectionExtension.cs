@@ -14,6 +14,14 @@ namespace CashExchangeMachine.Core.Extensions
             }
         }
 
+        public static void Remove<T>(this ICountableCollection<T> collection, ICountableCollection<T> removed)
+        {
+            foreach (KeyValuePair<T, int> keyValuePair in removed)
+            {
+                collection.Remove(keyValuePair.Key, keyValuePair.Value);
+            }
+        }
+
         public static ICountableCollection<T> Select<T>(this ICountableCollection<T> collection, Func<T, T> transformer)
         {
             var result = new CountableCollection<T>();

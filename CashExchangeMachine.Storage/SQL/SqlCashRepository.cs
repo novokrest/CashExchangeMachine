@@ -1,5 +1,7 @@
 ﻿using CashExchangeMachine.Core.Money;
 using System.Collections.Generic;
+using CashExchangeMachine.Core;
+using CashExchangeMachine.Core.Extensions;
 
 namespace CashExchangeMachine.Storage.Sql
 {
@@ -44,6 +46,7 @@ namespace CashExchangeMachine.Storage.Sql
             var coinLoader = new CoinRepository(_sqlConnectionProvider);
             foreach (var coinEntity in coinLoader.Load(moneyCollection.Currency))
             {
+                Verifiers.Verify(coinEntity.Count >= 0, "Coins count is less than zero: {0}", coinEntity.Count);
                 moneyCollection.Coins.Add(coinEntity.Nominal, coinEntity.Count);
             }
         }
@@ -64,6 +67,8 @@ namespace CashExchangeMachine.Storage.Sql
             {
                 noteRepository.Insert(noteEntity);
             }
+
+            _totalMoney[currency].Notes.Add(notes);
         }
 
         private void AddCoins(Coins coins, Currency currency)
@@ -72,17 +77,12 @@ namespace CashExchangeMachine.Storage.Sql
             var coinRepository = new CoinRepository(_sqlConnectionProvider);
 
             // TODO: create more friendly API for Coins class
-            foreach (var coinNominalCountPair in coins)
+            foreach (var coinEntity in ConvertToCoinEntities(coins, currency))
             {
-                var coinEntity = new CoinEntity
-                {
-                    Nominal = coinNominalCountPair.Key,
-                    Currency = currency.Name,
-                    Count = coinNominalCountPair.Value
-                };
-
                 coinRepository.Insert(coinEntity);
             }
+
+            _totalMoney[currency].Coins.Add(coins);
         }
 
         public void RemoveMoney(MoneyCollection money)
@@ -107,6 +107,8 @@ namespace CashExchangeMachine.Storage.Sql
             {
                 noteRepository.Delete(noteEntity);
             }
+
+            _totalMoney[currency].Notes.Remove(notes);
         }
 
         private void RemoveCoins(Coins coins, Currency currency)
@@ -117,6 +119,8 @@ namespace CashExchangeMachine.Storage.Sql
             {
                 coinRepository.Delete(coinEntity);
             }
+
+            _totalMoney[currency].Coins.Remove(coins);
         }
 
         private IEnumerable<NoteEntity> ConvertToNoteEntities(Notes notes, Currency currency)
