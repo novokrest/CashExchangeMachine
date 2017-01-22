@@ -59,40 +59,38 @@ namespace CashExchangeMachine.WebApi.Tests
                       .AssertHasNotes(10, 0);
         }
 
-        //[Test]
-        //public void Given_EmptyCashState_And_CoinInserted_Then_MakeExchangeRequest_Should_ResturnInsertedMoney()
-        //{
-        //    SetNoMoney();
-        //    InsertCoin(1);
+        [Test]
+        public void Given_EmptyCashState_And_CoinInserted_Then_MakeExchangeRequest_Should_ResturnInsertedMoney()
+        {
+            SetNoMoney().AssertSuccess();
+            InsertCoin(1).AssertSuccess();
+            InsertCoin(10).AssertSuccess();
+            InsertCoin(10).AssertSuccess();
 
-        //    var response = MakeExchangeRequest();
-        //    Assert.IsFalse(response.IsSuccessStatusCode);
+            Exchange().AssertFailed(HttpStatusCode.Forbidden)
+                      .ExtractJson<MoneyResult>()
+                      .AssertNoNotes()
+                      .AssertHasCoins(1, 1)
+                      .AssertHasCoins(5, 0)
+                      .AssertHasCoins(10, 2)
+                      .AssertHasCoins(25, 0);
+        }
 
-        //    MoneyResult result = Extract<MoneyResult>(response);
-        //    Assert.IsEmpty(result.Notes);
-        //    Assert.IsNotEmpty(result.Coins);
-        //    Assert.IsTrue(result.HasCoins(1, 1));
-        //}
+        [Test]
+        public void Given_CoinInserted_Then_MakeInsertNoteRequest_Should_ReturnErrorStatusCode()
+        {
+            SetNoMoney().AssertSuccess();
+            InsertCoin(1).AssertSuccess();
+            InsertNote(1).AssertFailed(HttpStatusCode.BadRequest);
+        }
 
-        //[Test]
-        //public void Given_NoteInserted_Then_MakeInsertCoinRequest_Should_ReturnErrorStatusCode()
-        //{
-        //    SetNoMoney();
-        //    InsertCoin(1);
-
-        //    var response = InsertNote(1);
-        //    Assert.IsFalse(response.IsSuccessStatusCode);
-        //}
-
-        //[Test]
-        //public void Given_CoinInserted_Then_MakeInsertNoteRequest_Should_ReturnError()
-        //{
-        //    SetNoMoney();
-        //    InsertCoin(1);
-
-        //    var response = InsertNote(1);
-        //    Assert.IsFalse(response.IsSuccessStatusCode);
-        //}
+        [Test]
+        public void Given_NoteInserted_Then_MakeInsertCoinRequest_Should_ReturnError()
+        {
+            SetNoMoney().AssertSuccess();
+            InsertNote(5).AssertSuccess();
+            InsertCoin(25).AssertFailed(HttpStatusCode.BadRequest);
+        }
 
         [Test]
         public void Given_EnoughMoneyAvailable_And_CoinsInserted_Then_MakeExchangeRequest_Should_ReturnNotesSuccessfully_And_UpdateAvailableMoney()
