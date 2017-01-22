@@ -5,6 +5,7 @@ namespace CashExchangeMachine.Core.Machine
 {
     public interface ICashExchangeMachine
     {
+        MoneyCollection Money { get; }
         void InsertNote(int nominal);
         void InsertCoin(int nominal);
 
@@ -13,19 +14,16 @@ namespace CashExchangeMachine.Core.Machine
 
     internal class CashExchangeMachine : ICashExchangeMachine, IMachineStateOwner
     {
-        public readonly MoneyCollection _moneyCollection;
-        public IMachineState _state;
+        private readonly ICashRepository _cashRepository;
+        private IMachineState _state;
 
-        public CashExchangeMachine(Currency currency)
-            : this(MoneyCollection.Create(currency))
+        public CashExchangeMachine(ICashRepository cashRepository)
         {
+            _cashRepository = cashRepository;
+            _state = new FreshMachineState(this, Money);
         }
 
-        public CashExchangeMachine(MoneyCollection moneyCollection)
-        {
-            _moneyCollection = moneyCollection;
-            _state = new FreshMachineState(this, _moneyCollection);
-        }
+        public MoneyCollection Money => _cashRepository.LoadMoney();
 
         public void ChangeState(IMachineState state)
         {

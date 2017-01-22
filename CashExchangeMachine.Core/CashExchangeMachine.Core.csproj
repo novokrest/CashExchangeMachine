@@ -60,6 +60,7 @@
     <Compile Include="Money\Currency.cs" />
     <Compile Include="Exchangers\GreedyExchanger.cs" />
     <Compile Include="Money\CurrencyRegistry.cs" />
+    <Compile Include="Money\ICashRepository.cs" />
     <Compile Include="Money\MoneyCollection.cs" />
     <Compile Include="Exchangers\IExchanger.cs" />
     <Compile Include="Money\Notes.cs" />

@@ -1,6 +1,4 @@
-﻿using CashExchangeMachine.Core.Extensions;
-using CashExchangeMachine.Core.Money;
-using System;
+﻿using CashExchangeMachine.Core.Money;
 using System.Collections.Generic;
 
 namespace CashExchangeMachine.Storage.Sql

@@ -48,7 +48,6 @@
     <Compile Include="NoteEntity.cs" />
     <Compile Include="NoteRepository.cs" />
     <Compile Include="SQL\SqlCashRepository.cs" />
-    <Compile Include="ICashRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
