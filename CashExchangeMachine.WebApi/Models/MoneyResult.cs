@@ -5,16 +5,16 @@ using CashExchangeMachine.Core.Money;
 
 namespace CashExchangeMachine.WebApi.Models
 {
-    public class MoneyInfo
+    public class MoneyResult
     {
-        public static MoneyInfo CreateFrom(MoneyCollection money)
+        public static MoneyResult CreateFrom(MoneyCollection money)
         {
-            return new MoneyInfo(money.Currency.Name,
+            return new MoneyResult(money.Currency.Name,
                                  money.Notes.ToMonetaryAggregateInfoCollection(),
                                  money.Coins.ToMonetaryAggregateInfoCollection());
         }
 
-        public MoneyInfo(string currency, IReadOnlyCollection<MonetaryAggregateInfo> notes, IReadOnlyCollection<MonetaryAggregateInfo> coins)
+        public MoneyResult(string currency, IReadOnlyCollection<MonetaryAggregateInfo> notes, IReadOnlyCollection<MonetaryAggregateInfo> coins)
         {
             Currency = currency;
             Notes = notes;
@@ -40,7 +40,7 @@ namespace CashExchangeMachine.WebApi.Models
 
     internal static class CountableCollectoinExtension
     {
-        public static IReadOnlyCollection<MonetaryAggregateInfo> ToMonetaryAggregateInfoCollection(this ICountableCollection<int> collection)
+        public static IReadOnlyCollection<MonetaryAggregateInfo> ToMonetaryAggregateInfoCollection(this RestrictedIntegerCollection collection)
         {
             return collection.Select(keyValuePair => new MonetaryAggregateInfo(keyValuePair.Key, keyValuePair.Value))
                              .ToList();

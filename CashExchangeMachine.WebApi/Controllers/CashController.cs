@@ -19,7 +19,7 @@ namespace CashExchangeMachine.WebApi.Controllers
         [Route("money")]
         public IHttpActionResult GetAvailableCash()
         {
-            var availableMoney = MoneyInfo.CreateFrom(_cashExchangeMachine.GetAvailableMoney());
+            var availableMoney = MoneyResult.CreateFrom(_cashExchangeMachine.GetAvailableMoney());
             return Ok(availableMoney);
         }
 

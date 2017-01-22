@@ -46,7 +46,7 @@
     <Compile Include="Collections\RestrictedIntegerCollection.cs" />
     <Compile Include="Collections\RestrictedValueCollection.cs" />
     <Compile Include="Collections\DecreasingIntegerCollectionMultiplier.cs" />
-    <Compile Include="Extensions\CountableCollectionExtension.cs" />
+    <Compile Include="Extensions\RestrictedValueCollectionExtension.cs" />
     <Compile Include="Extensions\EnumerableExtension.cs" />
     <Compile Include="Machine\CashExchangeMachine.cs" />
     <Compile Include="Machine\ExchangeResult.cs" />

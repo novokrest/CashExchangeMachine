@@ -47,7 +47,9 @@ namespace CashExchangeMachine.Core.Collections
 
         public IEnumerator<KeyValuePair<T, int>> GetEnumerator()
         {
-            return _valueCollection.GetEnumerator();
+            return _allowableValues.Select(value => 
+                                           new KeyValuePair<T, int>(value, _valueCollection.Count(value)))
+                                   .GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
