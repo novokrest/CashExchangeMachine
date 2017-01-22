@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 using Owin;
 using System.Web.Http;
+using CashExchangeMachine.WebApi.Controllers;
+using CashExchangeMachine.WebApi.SelfHost.Ninject;
+using Ninject;
+using Ninject.Web.Common.OwinHost;
+using Ninject.Web.WebApi.OwinHost;
 
 namespace CashExchangeMachine.WebApi.SelfHost
 {
@@ -12,9 +13,17 @@ namespace CashExchangeMachine.WebApi.SelfHost
     {
         public void Configuration(IAppBuilder appBuilder)
         {
-            HttpConfiguration configuration = new HttpConfiguration();
+            var configuration = new HttpConfiguration();
             WebApiConfig.Register(configuration);
-            appBuilder.UseWebApi(configuration);
+            appBuilder.UseNinjectMiddleware(CreateKernel)
+                      .UseNinjectWebApi(configuration);
+        }
+
+        private static StandardKernel CreateKernel()
+        {
+            var kernel = new StandardKernel();
+            kernel.Load(Assembly.GetExecutingAssembly());
+            return kernel;
         }
     }
 }

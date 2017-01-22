@@ -19,9 +19,8 @@ namespace CashExchangeMachine.WebApi.SelfHost
         private static void CheckSqlConnection()
         {
             var sqlConnectionProvider = new SqlConnectionProvider(SqlConnectionString);
-            using (var sqlConnection = sqlConnectionProvider.OpenSqlConnection())
+            using (sqlConnectionProvider.OpenSqlConnection())
             {
-                sqlConnection.Open();
             }
         }
 
