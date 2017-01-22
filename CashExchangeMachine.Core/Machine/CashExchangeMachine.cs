@@ -16,6 +16,7 @@ namespace CashExchangeMachine.Core.Machine
 
     public class CashExchangeMachine : ICashExchangeMachine, IMachineStateOwner
     {
+        private readonly object _lock = new object();
         private IMachineState _state;
 
         public CashExchangeMachine(ICashRepository cashRepository, Currency currency)
@@ -30,27 +31,43 @@ namespace CashExchangeMachine.Core.Machine
 
         public void SetMoney(MoneyCollection money)
         {
-            _state.SetMoney(money);
+            lock (_lock)
+            {
+                _state.SetMoney(money);
+            }
         }
 
         public MoneyCollection GetAvailableMoney()
         {
-            return _state.GetAvailableMoney();
+            lock (_lock)
+            {
+                return _state.GetAvailableMoney();
+            }
         }
 
         public void InsertNote(int nominal)
         {
-            _state.InsertNote(nominal);
+            lock (_lock)
+            {
+                _state.InsertNote(nominal);
+            }
+            
         }
 
         public void InsertCoin(int nominal)
         {
-            _state.InsertCoin(nominal);
+            lock (_lock)
+            {
+                _state.InsertCoin(nominal);
+            }
         }
 
         public IExchangeResult ConfirmExchange()
         {
-            return _state.Exchange();
+            lock (_lock)
+            {
+                return _state.Exchange();
+            }
         }
     }
 }
