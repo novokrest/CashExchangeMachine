@@ -116,7 +116,7 @@ namespace CashExchangeMachine.WebApi.Tests
                 .AddNotes(1, 10)
                 .Build();
             var moneyAfterExchange = new MoneyBuilder(Currency.Dollar)
-                .AddNotes(1, 1)
+                .AddNotes(1)
                 .Build();
 
             Given_InitialMoney_And_MoneyInserted_Then_MakeExchangeRequest_Should_ReturnExpectedMoney(initialMoney, 

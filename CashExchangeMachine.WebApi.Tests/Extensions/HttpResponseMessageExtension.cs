@@ -1,7 +1,5 @@
 ﻿using System.Net;
 using System.Net.Http;
-using System.Runtime.CompilerServices;
-using System.Runtime.Serialization.Formatters;
 using Newtonsoft.Json;
 using NUnit.Framework;
 

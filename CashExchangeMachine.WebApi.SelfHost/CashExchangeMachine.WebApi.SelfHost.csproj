@@ -109,9 +109,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Ninject\CashModule.cs" />
-    <Compile Include="Ninject\SimpleController.cs" />
-    <Compile Include="Ninject\SimpleDependency.cs" />
-    <Compile Include="Ninject\SimpleModule.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />

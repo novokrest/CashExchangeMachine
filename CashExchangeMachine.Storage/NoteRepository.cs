@@ -1,5 +1,4 @@
-﻿using CashExchangeMachine.Core.Money;
-using CashExchangeMachine.Storage.Sql;
+﻿using CashExchangeMachine.Storage.Sql;
 
 namespace CashExchangeMachine.Storage
 {

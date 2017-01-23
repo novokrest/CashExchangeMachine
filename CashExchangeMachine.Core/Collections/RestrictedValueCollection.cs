@@ -1,7 +1,6 @@
 ﻿using CashExchangeMachine.Core.Extensions;
 using System.Collections.Generic;
 using System.Linq;
-using System;
 using System.Collections;
 
 namespace CashExchangeMachine.Core.Collections

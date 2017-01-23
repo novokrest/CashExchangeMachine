@@ -66,7 +66,7 @@ namespace CashExchangeMachine.Core.Machine.States
 
         private bool TryExchange(MoneyCollection resultMoney)
         {
-            ICountableCollection<int> exchangeResult = null;
+            ICountableCollection<int> exchangeResult;
             var greedyExchanger = new GreedyExchanger();
 
             if (greedyExchanger.TryExchange(new DecreasingIntegerCollectionMultiplier(Money.Notes, _currency.UnitFractions),

@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Net;
 using System.Web.Http;
 using CashExchangeMachine.Core.Machine;
-using CashExchangeMachine.Core.Money;
-using CashExchangeMachine.WebApi.HttpActionResults;
 using CashExchangeMachine.WebApi.Models;
 
 namespace CashExchangeMachine.WebApi.Controllers

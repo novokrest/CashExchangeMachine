@@ -1,8 +1,6 @@
 ﻿using System.Reflection;
 using Owin;
 using System.Web.Http;
-using CashExchangeMachine.WebApi.Controllers;
-using CashExchangeMachine.WebApi.SelfHost.Ninject;
 using Ninject;
 using Ninject.Web.Common.OwinHost;
 using Ninject.Web.WebApi.OwinHost;

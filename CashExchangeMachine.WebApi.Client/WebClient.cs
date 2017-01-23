@@ -1,10 +1,6 @@
 ﻿using CashExchangeMachine.Core;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CashExchangeMachine.WebApi.Client
 {
@@ -17,8 +13,7 @@ namespace CashExchangeMachine.WebApi.Client
             HttpClient client = null;
             try
             {
-                client = new HttpClient();
-                client.BaseAddress = new Uri(server);
+                client = new HttpClient { BaseAddress = new Uri(server) };
                 HttpClient tmp = client; client = null;
                 return new WebClient(tmp);
             }

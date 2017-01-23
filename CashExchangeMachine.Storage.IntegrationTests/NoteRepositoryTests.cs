@@ -1,11 +1,8 @@
 ﻿using CashExchangeMachine.Core.Money;
 using CashExchangeMachine.Storage.Sql;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CashExchangeMachine.Storage.IntegrationTests
 {

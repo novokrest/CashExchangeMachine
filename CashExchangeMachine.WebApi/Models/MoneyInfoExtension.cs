@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using CashExchangeMachine.Core.Extensions;
+﻿using CashExchangeMachine.Core.Extensions;
 using CashExchangeMachine.Core.Money;
 
 namespace CashExchangeMachine.WebApi.Models
