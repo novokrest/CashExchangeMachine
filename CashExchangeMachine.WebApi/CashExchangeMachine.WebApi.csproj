@@ -123,8 +123,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="HttpActionResults\Forbidden.cs" />
-    <Compile Include="Models\MoneyResult.cs" />
-    <Compile Include="Models\MoneyResultExtension.cs" />
+    <Compile Include="Models\MoneyInfo.cs" />
+    <Compile Include="Models\MoneyInfoExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

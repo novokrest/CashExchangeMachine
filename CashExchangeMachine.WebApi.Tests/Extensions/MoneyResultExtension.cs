@@ -10,32 +10,32 @@ namespace CashExchangeMachine.WebApi.Tests.Extensions
 {
     internal static class MoneyResultExtension
     {
-        public static MoneyResult AssertNoCoins(this MoneyResult moneyResult)
+        public static MoneyInfo AssertNoCoins(this MoneyInfo moneyInfo)
         {
-            Assert.IsTrue(moneyResult.Coins.All(coinInfo => coinInfo.Count == 0));
-            return moneyResult;
+            Assert.IsTrue(moneyInfo.Coins.All(coinInfo => coinInfo.Count == 0));
+            return moneyInfo;
         }
 
-        public static MoneyResult AssertNoNotes(this MoneyResult moneyResult)
+        public static MoneyInfo AssertNoNotes(this MoneyInfo moneyInfo)
         {
-            Assert.IsTrue(moneyResult.Notes.All(noteInfo => noteInfo.Count == 0));
-            return moneyResult;
+            Assert.IsTrue(moneyInfo.Notes.All(noteInfo => noteInfo.Count == 0));
+            return moneyInfo;
         }
 
-        public static MoneyResult AssertHasNotes(this MoneyResult moneyResult, int nominal, int count)
+        public static MoneyInfo AssertHasNotes(this MoneyInfo moneyInfo, int nominal, int count)
         {
-            Assert.IsTrue(moneyResult.Notes
+            Assert.IsTrue(moneyInfo.Notes
                                      .Single(noteInfo => noteInfo.Nominal == nominal)
                                      .Count == count);
-            return moneyResult;
+            return moneyInfo;
         }
 
-        public static MoneyResult AssertHasCoins(this MoneyResult moneyResult, int nominal, int count)
+        public static MoneyInfo AssertHasCoins(this MoneyInfo moneyInfo, int nominal, int count)
         {
-            Assert.IsTrue(moneyResult.Coins
+            Assert.IsTrue(moneyInfo.Coins
                                      .Single(coinInfo => coinInfo.Nominal == nominal)
                                      .Count == count);
-            return moneyResult;
+            return moneyInfo;
         }
     }
 }

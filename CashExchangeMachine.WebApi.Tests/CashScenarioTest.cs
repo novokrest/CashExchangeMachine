@@ -20,7 +20,7 @@ namespace CashExchangeMachine.WebApi.Tests
             SetNoMoney().AssertSuccess();
 
             GetAvailableMoney().AssertSuccess()
-                               .ExtractJson<MoneyResult>()
+                               .ExtractJson<MoneyInfo>()
                                .AssertNoCoins()
                                .AssertNoNotes();
         }
@@ -39,7 +39,7 @@ namespace CashExchangeMachine.WebApi.Tests
             SetNoMoney().AssertSuccess();
             SetMoney(new MoneyBuilder(Currency.Dollar).AddCoins(1, 10).AddNotes(5, 50).Build()).AssertSuccess();
             GetAvailableMoney().AssertSuccess()
-                               .ExtractJson<MoneyResult>()
+                               .ExtractJson<MoneyInfo>()
                                .AssertHasCoins(1, 10)
                                .AssertHasNotes(5, 50);
         }
@@ -53,7 +53,7 @@ namespace CashExchangeMachine.WebApi.Tests
             InsertNote(1).AssertSuccess();
 
             Exchange().AssertFailed(HttpStatusCode.Forbidden)
-                      .ExtractJson<MoneyResult>()
+                      .ExtractJson<MoneyInfo>()
                       .AssertNoCoins()
                       .AssertHasNotes(1, 2)
                       .AssertHasNotes(2, 1)
@@ -70,7 +70,7 @@ namespace CashExchangeMachine.WebApi.Tests
             InsertCoin(10).AssertSuccess();
 
             Exchange().AssertFailed(HttpStatusCode.Forbidden)
-                      .ExtractJson<MoneyResult>()
+                      .ExtractJson<MoneyInfo>()
                       .AssertNoNotes()
                       .AssertHasCoins(1, 1)
                       .AssertHasCoins(5, 0)
@@ -232,12 +232,12 @@ namespace CashExchangeMachine.WebApi.Tests
                                .ForEach(coinNominal => InsertCoin(coinNominal).AssertSuccess());
 
             var actualExchangeResult = Exchange().AssertStatusCode(expectedStatusCode)
-                                                 .ExtractJson<MoneyResult>()
+                                                 .ExtractJson<MoneyInfo>()
                                                  .ToMoneyCollection();
             Assert.IsTrue(MoneyCollectionEqualityComparer.IsEquals(expectedExchangeResult, actualExchangeResult));
 
             var actualMoneyAfterExchange = GetAvailableMoney().AssertSuccess()
-                                                              .ExtractJson<MoneyResult>()
+                                                              .ExtractJson<MoneyInfo>()
                                                               .ToMoneyCollection();
             Assert.IsTrue(MoneyCollectionEqualityComparer.IsEquals(expectedMoneyAfterExchange, actualMoneyAfterExchange));
         }
@@ -255,7 +255,7 @@ namespace CashExchangeMachine.WebApi.Tests
 
         private HttpResponseMessage SetMoney(MoneyCollection money)
         {
-            return HttpClient.SendAsync(CreateRequest("api/cashmachine/money", HttpMethod.Post, MoneyResult.CreateFrom(money))).Result;
+            return HttpClient.SendAsync(CreateRequest("api/cashmachine/money", HttpMethod.Post, MoneyInfo.CreateFrom(money))).Result;
         }
 
         private HttpResponseMessage GetAvailableMoney()

@@ -5,22 +5,21 @@ using CashExchangeMachine.Core.Money;
 
 namespace CashExchangeMachine.WebApi.Models
 {
-    //TODO: Rename to MoneyData or MoneyInfo
-    public class MoneyResult
+    public class MoneyInfo
     {
-        public static MoneyResult CreateFrom(MoneyCollection money)
+        public static MoneyInfo CreateFrom(MoneyCollection money)
         {
-            return new MoneyResult(money.Currency.Name,
+            return new MoneyInfo(money.Currency.Name,
                                    money.Notes.ToMonetaryAggregateInfoCollection(),
                                    money.Coins.ToMonetaryAggregateInfoCollection());
         }
 
-        public MoneyResult()
+        public MoneyInfo()
         {
             
         }
 
-        public MoneyResult(string currency, IReadOnlyCollection<MonetaryAggregateInfo> notes, IReadOnlyCollection<MonetaryAggregateInfo> coins)
+        public MoneyInfo(string currency, IReadOnlyCollection<MonetaryAggregateInfo> notes, IReadOnlyCollection<MonetaryAggregateInfo> coins)
         {
             Currency = currency;
             Notes = notes;

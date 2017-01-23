@@ -22,17 +22,17 @@ namespace CashExchangeMachine.WebApi.Controllers
         [Route("money")]
         public IHttpActionResult GetAvailableCash()
         {
-            var availableMoney = MoneyResult.CreateFrom(_cashExchangeMachine.GetAvailableMoney());
+            var availableMoney = MoneyInfo.CreateFrom(_cashExchangeMachine.GetAvailableMoney());
             return Ok(availableMoney);
         }
 
         [HttpPost]
         [Route("money")]
-        public IHttpActionResult SetAvailableCash([FromBody]MoneyResult moneyResult)
+        public IHttpActionResult SetAvailableCash([FromBody]MoneyInfo moneyInfo)
         {
             try
             {
-                _cashExchangeMachine.SetMoney(moneyResult.ToMoneyCollection());
+                _cashExchangeMachine.SetMoney(moneyInfo.ToMoneyCollection());
                 return Ok();
             }
             catch (InvalidOperationException exception)
@@ -79,7 +79,7 @@ namespace CashExchangeMachine.WebApi.Controllers
             try
             {
                 var exchangeResult = _cashExchangeMachine.ConfirmExchange();
-                var moneyResult = MoneyResult.CreateFrom(exchangeResult.Money);
+                var moneyResult = MoneyInfo.CreateFrom(exchangeResult.Money);
                 return exchangeResult.Success ? Ok(moneyResult)
                                               : Forbidden(moneyResult);
             }
