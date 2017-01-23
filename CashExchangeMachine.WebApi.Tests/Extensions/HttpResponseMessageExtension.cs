@@ -25,6 +25,12 @@ namespace CashExchangeMachine.WebApi.Tests.Extensions
             return response;
         }
 
+        public static HttpResponseMessage AssertStatusCode(this HttpResponseMessage response, HttpStatusCode expectedStatusCode)
+        {
+            Assert.AreEqual(expectedStatusCode, response.StatusCode);
+            return response;
+        }
+
         public static T ExtractJson<T>(this HttpResponseMessage response)
         {
             return JsonConvert.DeserializeObject<T>(response.Content.ReadAsStringAsync().Result);

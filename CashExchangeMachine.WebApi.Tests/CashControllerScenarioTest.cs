@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
+using CashExchangeMachine.Core.Extensions;
 using CashExchangeMachine.Core.Money;
 using CashExchangeMachine.WebApi.Models;
 using CashExchangeMachine.WebApi.Tests.Extensions;
@@ -95,25 +97,149 @@ namespace CashExchangeMachine.WebApi.Tests
         [Test]
         public void Given_EnoughMoneyAvailable_And_CoinsInserted_Then_MakeExchangeRequest_Should_ReturnNotesSuccessfully_And_UpdateAvailableMoney()
         {
-            
+            var initialMoney = new MoneyBuilder(Currency.Dollar)
+                .AddNotes(10, 40)
+                .AddNotes(5, 10)
+                .AddNotes(2, 20)
+                .AddNotes(1, 11)
+                .Build();
+            var insertedMoney = new MoneyBuilder(Currency.Dollar)
+                .AddCoins(25, 1000)
+                .AddCoins(10, 1500)
+                .AddCoins(5, 1000)
+                .AddCoins(1, 5000)
+                .Build();
+            var exchangeResult = new MoneyBuilder(Currency.Dollar)
+                .AddNotes(10, 40)
+                .AddNotes(5, 10)
+                .AddNotes(2, 20)
+                .AddNotes(1, 10)
+                .Build();
+            var moneyAfterExchange = new MoneyBuilder(Currency.Dollar)
+                .AddNotes(1, 1)
+                .Build();
+
+            Given_InitialMoney_And_MoneyInserted_Then_MakeExchangeRequest_Should_ReturnExpectedMoney(initialMoney, 
+                                                                                                     insertedMoney, 
+                                                                                                     HttpStatusCode.OK,
+                                                                                                     exchangeResult, 
+                                                                                                     moneyAfterExchange);
         }
 
         [Test]
         public void Given_NotEnoughMoneyAvailable_And_NotesInserted_Then_MakeExchangeRequest_ShouldReturnInsertedNotes_With_ErrorStatus()
         {
-            
+            var initialMoney = new MoneyBuilder(Currency.Dollar)
+                .AddNotes(1, 2)
+                .AddNotes(2, 2)
+                .AddNotes(5, 2)
+                .AddNotes(10, 2)
+                .AddCoins(1, 2)
+                .AddCoins(5, 2)
+                .AddCoins(10, 2)
+                .AddCoins(25, 2)
+                .Build();
+            var insertedMoney = new MoneyBuilder(Currency.Dollar)
+                .AddNotes(1, 10)
+                .AddNotes(2, 10)
+                .AddNotes(5, 10)
+                .AddNotes(10, 10)
+                .Build();
+            var exchangeResult = insertedMoney;
+            var moneyAfterExchange = initialMoney;
+
+            Given_InitialMoney_And_MoneyInserted_Then_MakeExchangeRequest_Should_ReturnExpectedMoney(initialMoney, 
+                                                                                                     insertedMoney, 
+                                                                                                     HttpStatusCode.Forbidden,
+                                                                                                     exchangeResult, 
+                                                                                                     moneyAfterExchange);
         }
 
         [Test]
         public void Given_EnoughMoneyAvailable_And_NotesInserted_Then_MakeExchangeRequest_Should_ReturnCoinsSuccessfully_And_UpdateAvailableMoney()
         {
-            
+            var initialMoney = new MoneyBuilder(Currency.Dollar)
+                .AddCoins(1, 10000)
+                .AddCoins(5, 1000)
+                .AddCoins(10, 1500)
+                .AddCoins(25, 1000)
+                .Build();
+            var insertedMoney = new MoneyBuilder(Currency.Dollar)
+                .AddNotes(10, 40)
+                .AddNotes(5, 10)
+                .AddNotes(2, 20)
+                .AddNotes(1, 10)
+                .Build();
+            var exchangeResult = new MoneyBuilder(Currency.Dollar)
+                .AddCoins(25, 1000)
+                .AddCoins(10, 1500)
+                .AddCoins(5, 1000)
+                .AddCoins(1, 5000)
+                .Build();
+            var moneyAfterExchange = new MoneyBuilder(Currency.Dollar)
+                .AddCoins(1, 5000)
+                .Build();
+
+            Given_InitialMoney_And_MoneyInserted_Then_MakeExchangeRequest_Should_ReturnExpectedMoney(initialMoney,
+                                                                                                     insertedMoney,
+                                                                                                     HttpStatusCode.OK,
+                                                                                                     exchangeResult,
+                                                                                                     moneyAfterExchange);
         }
 
         [Test]
         public void Given_NotEnoughMoneyAvailable_And_CoinsInserted_Then_MakeExchangeRequest_ShouldReturnInsertedCoins_With_ErrorStatus()
         {
+            var initialMoney = new MoneyBuilder(Currency.Dollar)
+                .AddNotes(1, 2)
+                .AddNotes(2, 2)
+                .AddNotes(5, 2)
+                .AddNotes(10, 2)
+                .AddCoins(1, 2)
+                .AddCoins(5, 2)
+                .AddCoins(10, 2)
+                .AddCoins(25, 2)
+                .Build();
+            var insertedMoney = new MoneyBuilder(Currency.Dollar)
+                .AddCoins(1, 100)
+                .AddCoins(5, 100)
+                .AddCoins(10, 100)
+                .AddCoins(25, 1000)
+                .Build();
+            var exchangeResult = insertedMoney;
+            var moneyAfterExchange = initialMoney;
 
+            Given_InitialMoney_And_MoneyInserted_Then_MakeExchangeRequest_Should_ReturnExpectedMoney(initialMoney,
+                                                                                                     insertedMoney,
+                                                                                                     HttpStatusCode.Forbidden,
+                                                                                                     exchangeResult,
+                                                                                                     moneyAfterExchange);
+        }
+
+        private void Given_InitialMoney_And_MoneyInserted_Then_MakeExchangeRequest_Should_ReturnExpectedMoney(MoneyCollection initialMoney, 
+                                                                                                              MoneyCollection insertedMoney,
+                                                                                                              HttpStatusCode expectedStatusCode,
+                                                                                                              MoneyCollection expectedExchangeResult, 
+                                                                                                              MoneyCollection expectedMoneyAfterExchange)
+        {
+            SetMoney(initialMoney).AssertSuccess();
+
+            insertedMoney.Notes.SelectMany(noteNominalCounPair => 
+                                           Enumerable.Repeat(noteNominalCounPair.Key, noteNominalCounPair.Value))
+                               .ForEach(noteNominal => InsertNote(noteNominal).AssertSuccess());
+            insertedMoney.Coins.SelectMany(coinNominalCounPair =>
+                                           Enumerable.Repeat(coinNominalCounPair.Key, coinNominalCounPair.Value))
+                               .ForEach(coinNominal => InsertCoin(coinNominal).AssertSuccess());
+
+            var actualExchangeResult = Exchange().AssertStatusCode(expectedStatusCode)
+                                                 .ExtractJson<MoneyResult>()
+                                                 .ToMoneyCollection();
+            Assert.IsTrue(MoneyCollectionEqualityComparer.IsEquals(expectedExchangeResult, actualExchangeResult));
+
+            var actualMoneyAfterExchange = GetAvailableMoney().AssertSuccess()
+                                                              .ExtractJson<MoneyResult>()
+                                                              .ToMoneyCollection();
+            Assert.IsTrue(MoneyCollectionEqualityComparer.IsEquals(expectedMoneyAfterExchange, actualMoneyAfterExchange));
         }
 
         private HttpResponseMessage Exchange()

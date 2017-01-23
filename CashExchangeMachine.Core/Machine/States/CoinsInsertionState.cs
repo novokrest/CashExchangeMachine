@@ -50,6 +50,11 @@ namespace CashExchangeMachine.Core.Machine.States
             var resultMoney = MoneyCollection.Create(_currency);
             bool success = TryExchange(resultMoney);
 
+            if (success)
+            {
+                _cashRepository.RemoveMoney(resultMoney);
+            }
+
             _owner.ChangeState<FreshMachineState>(_cashRepository, _currency);
 
             return new ExchangeResult

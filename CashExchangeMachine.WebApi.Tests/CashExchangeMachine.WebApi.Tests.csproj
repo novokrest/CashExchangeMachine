@@ -121,6 +121,7 @@
     <Compile Include="Extensions\HttpResponseMessageExtension.cs" />
     <Compile Include="Extensions\MoneyResultExtension.cs" />
     <Compile Include="MoneyBuilder.cs" />
+    <Compile Include="MoneyCollectionEqualityComparer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ControllerBaseTest.cs" />
   </ItemGroup>

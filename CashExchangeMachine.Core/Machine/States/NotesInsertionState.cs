@@ -46,6 +46,11 @@ namespace CashExchangeMachine.Core.Machine.States
             var returnedMoney = MoneyCollection.Create(_currency);
             bool success = TryExchange(returnedMoney);
 
+            if (success)
+            {
+                _cashRepository.RemoveMoney(returnedMoney);
+            }
+
             _owner.ChangeState<FreshMachineState>(_cashRepository, _currency);
 
             return new ExchangeResult
@@ -76,5 +81,6 @@ namespace CashExchangeMachine.Core.Machine.States
         //TODO: MoneyCollection should created from Notes or/and Coins
         //TODO: static methods for ExchangeResult.Success and Failed
         //TODO: Notes.Add should accept only Notes, Coins - only Coins
+        //TODO: Move common logic to base class
     }
 }
