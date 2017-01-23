@@ -1,6 +1,6 @@
 ﻿namespace CashExchangeMachine.Storage
 {
-    internal interface IMonetaryAggregateEntity
+    internal interface IMonetaryAggregateShift
     {
         int Nominal { get; set; }
         string Currency { get; set; }

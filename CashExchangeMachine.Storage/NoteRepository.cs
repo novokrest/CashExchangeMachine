@@ -2,7 +2,7 @@
 
 namespace CashExchangeMachine.Storage
 {
-    internal class NoteRepository : MonetaryAggregateRepository<NoteEntity>
+    internal class NoteRepository : MonetaryAggregateRepository<NoteShift>
     {
         private const string NoteTableName = "Notes";
 
@@ -11,9 +11,9 @@ namespace CashExchangeMachine.Storage
         {
         }
 
-        protected override NoteEntity CreateEmptyMonetaryAggregate()
+        protected override NoteShift CreateEmptyMonetaryAggregate()
         {
-            return new NoteEntity();
+            return new NoteShift();
         }
     }
 }

@@ -8,6 +8,7 @@ namespace CashExchangeMachine.Core.Machine
         MoneyCollection Money { get; }
     }
 
+    //TODO: static methods for ExchangeResult.Success and Failed
     internal class ExchangeResult : IExchangeResult
     {
         public bool Success { get; set; }

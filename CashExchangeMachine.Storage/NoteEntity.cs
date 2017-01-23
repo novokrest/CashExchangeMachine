@@ -1,6 +1,6 @@
 ﻿namespace CashExchangeMachine.Storage
 {
-    internal class NoteEntity : IMonetaryAggregateEntity
+    internal class NoteShift : IMonetaryAggregateShift
     {
         public int Nominal { get; set; }
         public string Currency { get; set; }

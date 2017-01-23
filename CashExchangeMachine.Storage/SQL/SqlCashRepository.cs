@@ -60,7 +60,7 @@ namespace CashExchangeMachine.Storage.Sql
 
         private void AddNotes(Notes notes, Currency currency)
         {
-            // TODO: create repository only one time, cash and then reuse
+            // TODO: may be create repository only one time, cash and then reuse
             var noteRepository = new NoteRepository(_sqlConnectionProvider);
 
             foreach (var noteEntity in ConvertToNoteEntities(notes, currency))
@@ -73,10 +73,9 @@ namespace CashExchangeMachine.Storage.Sql
 
         private void AddCoins(Coins coins, Currency currency)
         {
-            // TODO: create repository only one time, cash and then reuse
+            // TODO: may be create repository only one time, cash and then reuse
             var coinRepository = new CoinRepository(_sqlConnectionProvider);
 
-            // TODO: create more friendly API for Coins class
             foreach (var coinEntity in ConvertToCoinEntities(coins, currency))
             {
                 coinRepository.Insert(coinEntity);
@@ -100,7 +99,6 @@ namespace CashExchangeMachine.Storage.Sql
 
         private void RemoveNotes(Notes notes, Currency currency)
         {
-            // TODO: !!!!
             var noteRepository = new NoteRepository(_sqlConnectionProvider);
 
             foreach (var noteEntity in ConvertToNoteEntities(notes, currency))
@@ -123,12 +121,11 @@ namespace CashExchangeMachine.Storage.Sql
             _totalMoney[currency].Coins.Remove(coins);
         }
 
-        private IEnumerable<NoteEntity> ConvertToNoteEntities(Notes notes, Currency currency)
+        private IEnumerable<NoteShift> ConvertToNoteEntities(Notes notes, Currency currency)
         {
-            // TODO: create more friendly API for Notes class
             foreach (var noteNominalCountPair in notes)
             {
-                var noteEntity = new NoteEntity
+                var noteEntity = new NoteShift
                 {
                     Nominal = noteNominalCountPair.Key,
                     Currency = currency.Name,
@@ -139,12 +136,11 @@ namespace CashExchangeMachine.Storage.Sql
             }
         }
 
-        private IEnumerable<CoinEntity> ConvertToCoinEntities(Coins coins, Currency currency)
+        private IEnumerable<CoinShift> ConvertToCoinEntities(Coins coins, Currency currency)
         {
-            // TODO: create more friendly API for Notes class
             foreach (var coinNominalCountPair in coins)
             {
-                var coinEntity = new CoinEntity
+                var coinEntity = new CoinShift
                 {
                     Nominal = coinNominalCountPair.Key,
                     Currency = currency.Name,

@@ -1,6 +1,6 @@
 ﻿namespace CashExchangeMachine.Storage
 {
-    internal class CoinEntity : IMonetaryAggregateEntity
+    internal class CoinShift : IMonetaryAggregateShift
     {
         public int Count { get; set; }
 

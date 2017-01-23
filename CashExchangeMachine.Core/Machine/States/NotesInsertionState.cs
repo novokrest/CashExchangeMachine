@@ -6,6 +6,7 @@ using System;
 
 namespace CashExchangeMachine.Core.Machine.States
 {
+    //TODO: Move common logic to base class
     internal class NotesInsertionState : IMachineState
     {
         private readonly IMachineStateOwner _owner;
@@ -76,11 +77,5 @@ namespace CashExchangeMachine.Core.Machine.States
             resultMoney.Notes.Add(_insertedNotes);
             return false;
         }
-
-        //TODO: Notes and Coins should store Currency
-        //TODO: MoneyCollection should created from Notes or/and Coins
-        //TODO: static methods for ExchangeResult.Success and Failed
-        //TODO: Notes.Add should accept only Notes, Coins - only Coins
-        //TODO: Move common logic to base class
     }
 }

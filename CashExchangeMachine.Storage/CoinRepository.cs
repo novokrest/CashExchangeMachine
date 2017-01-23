@@ -2,7 +2,7 @@
 
 namespace CashExchangeMachine.Storage
 {
-    internal class CoinRepository : MonetaryAggregateRepository<CoinEntity>
+    internal class CoinRepository : MonetaryAggregateRepository<CoinShift>
     {
         private const string CoinTableName = "Coins";
 
@@ -11,9 +11,9 @@ namespace CashExchangeMachine.Storage
         {
         }
 
-        protected override CoinEntity CreateEmptyMonetaryAggregate()
+        protected override CoinShift CreateEmptyMonetaryAggregate()
         {
-            return new CoinEntity();
+            return new CoinShift();
         }
     }
 }

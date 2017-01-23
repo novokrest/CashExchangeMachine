@@ -2,6 +2,9 @@
 {
     public class MoneyCollection
     {
+        //TODO: MoneyCollection should created from Notes or/and Coins
+        //TODO: Notes.Add should accept only Notes, Coins - only Coins
+        // TODO: create more friendly API for Notes and Coins class
         public static MoneyCollection Create(Currency currency)
         {
             return new MoneyCollection(currency);

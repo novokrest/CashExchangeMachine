@@ -7,12 +7,10 @@ using System.Linq;
 
 namespace CashExchangeMachine.Storage
 {
-    internal abstract class MonetaryAggregateRepository<TMonetaryAggregateEntity> 
-        where TMonetaryAggregateEntity : IMonetaryAggregateEntity
+    //TODO: choose more evident names for methods
+    internal abstract class MonetaryAggregateRepository<TMonetaryAggregateShift> 
+        where TMonetaryAggregateShift : IMonetaryAggregateShift
     {
-        // TODO: create method for returning select query
-        private const string SelectPattern = "SELECT Nominal, Currency, Count FROM {0} WHERE Currency = '{1}'";
-
         private readonly ISqlConnectionProvider _sqlConnectionProvider;
         private readonly string _tableName;
 
@@ -22,15 +20,15 @@ namespace CashExchangeMachine.Storage
             _tableName = tableName;
         }
 
-        public IReadOnlyCollection<TMonetaryAggregateEntity> Load(Currency currency)
+        public IReadOnlyCollection<TMonetaryAggregateShift> Load(Currency currency)
         {
             return LazyLoad(currency).ToList();
         }
 
-        private IEnumerable<TMonetaryAggregateEntity> LazyLoad(Currency currency)
+        private IEnumerable<TMonetaryAggregateShift> LazyLoad(Currency currency)
         {
             using (var sqlConnection = _sqlConnectionProvider.OpenSqlConnection())
-            using (var sqlCommand = new SqlCommand(string.Format(SelectPattern, _tableName, currency.Name), sqlConnection))
+            using (var sqlCommand = new SqlCommand(CreateSelectQuery(currency), sqlConnection))
             using (var reader = sqlCommand.ExecuteReader())
             {
                 while (reader.Read())
@@ -45,7 +43,12 @@ namespace CashExchangeMachine.Storage
             }
         }
 
-        public void Insert(TMonetaryAggregateEntity entity)
+        private string CreateSelectQuery(Currency currency)
+        {
+            return $@"SELECT Nominal, Currency, Count FROM {_tableName} WHERE Currency = '{currency.Name}'";
+        }
+
+        public void Insert(TMonetaryAggregateShift entity)
         {
             using (var sqlConnection = _sqlConnectionProvider.OpenSqlConnection())
             using (var sqlCommand = new SqlCommand(CreateInsertQuery(entity), sqlConnection))
@@ -55,15 +58,13 @@ namespace CashExchangeMachine.Storage
             }
         }
 
-        private string CreateInsertQuery(TMonetaryAggregateEntity entity)
+        private string CreateInsertQuery(TMonetaryAggregateShift entity)
         {
             return $@"UPDATE {_tableName} SET [Count] = [Count] + {entity.Count} 
                                           WHERE [Nominal] = {entity.Nominal} AND Currency = '{entity.Currency}'";
         }
 
-
-        // TODO: MonetaryAggregateEntity -> MonetaryAggregateDiff, choose more evident names for methods
-        public void Delete(TMonetaryAggregateEntity entity)
+        public void Delete(TMonetaryAggregateShift entity)
         {
             using (var connection = _sqlConnectionProvider.OpenSqlConnection())
             using (var command = new SqlCommand(CreateDeleteQuery(entity), connection))
@@ -73,13 +74,13 @@ namespace CashExchangeMachine.Storage
             }
         }
 
-        private string CreateDeleteQuery(TMonetaryAggregateEntity entity)
+        private string CreateDeleteQuery(TMonetaryAggregateShift entity)
         {
             return $@"UPDATE {_tableName} SET [Count] = [Count] - {entity.Count}
                       WHERE [Nominal] = {entity.Nominal} AND Currency = '{entity.Currency}'";
         }
 
-        protected abstract TMonetaryAggregateEntity CreateEmptyMonetaryAggregate();
+        protected abstract TMonetaryAggregateShift CreateEmptyMonetaryAggregate();
 
     }
 }

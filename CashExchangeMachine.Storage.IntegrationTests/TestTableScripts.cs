@@ -28,10 +28,10 @@ namespace CashExchangeMachine.Storage.IntegrationTests
                       )";
         }
 
-        public string InsertScripts(params IMonetaryAggregateEntity[] entities)
+        public string InsertScripts(params IMonetaryAggregateShift[] shifts)
         {
             var scriptBuilder = new StringBuilder();
-            foreach (var entity in entities)
+            foreach (var entity in shifts)
             {
                 scriptBuilder.AppendLine($@"INSERT INTO {_tableName} VALUES ({entity.Nominal}, '{entity.Currency}', {entity.Count});");
             }

@@ -13,19 +13,19 @@ namespace CashExchangeMachine.Storage.IntegrationTests
         private const string NoteTableName = "Notes";
         private const string Currency = "Dollar";
 
-        private static readonly NoteEntity[] InitNoteEntities = new[] 
+        private static readonly NoteShift[] InitNoteShifts = new[] 
         {
-            new NoteEntity { Nominal = 1, Currency = "Dollar", Count = 123 },
-            new NoteEntity { Nominal = 2, Currency = "Dollar", Count = 342 },
-            new NoteEntity { Nominal = 5, Currency = "Dollar", Count = 9574 },
-            new NoteEntity { Nominal = 10, Currency = "Dollar", Count = 332 }
+            new NoteShift { Nominal = 1, Currency = "Dollar", Count = 123 },
+            new NoteShift { Nominal = 2, Currency = "Dollar", Count = 342 },
+            new NoteShift { Nominal = 5, Currency = "Dollar", Count = 9574 },
+            new NoteShift { Nominal = 10, Currency = "Dollar", Count = 332 }
         };
 
         [SetUp]
         public void SetUp()
         {
             TestTableInitializer.Create(ConnectionString, NoteTableName)
-                                .Initialize(InitNoteEntities);
+                                .Initialize(InitNoteShifts);
         }
 
         [Test]
@@ -35,17 +35,16 @@ namespace CashExchangeMachine.Storage.IntegrationTests
 
             var loadedNotes = noteRepository.Load(CurrencyRegistry.GetCurrency(Currency));
 
-            Assert.IsTrue(InitNoteEntities.Length == loadedNotes.Count);
+            Assert.IsTrue(InitNoteShifts.Length == loadedNotes.Count);
         }
 
         [Test]
         public void Given_NewNotes_Should_AddNotesSuccessfuly()
         {
             var noteRepository = GetNoteRepository();
-            // TODO: may be pass just Currency name ?
             var notesBeforeInsertion = LoadNotes(noteRepository);
 
-            var note = new NoteEntity { Nominal = 1, Currency = Currency, Count = 10 };
+            var note = new NoteShift { Nominal = 1, Currency = Currency, Count = 10 };
             noteRepository.Insert(note);
 
             var notesAfterInsertion = LoadNotes(noteRepository);
@@ -57,10 +56,9 @@ namespace CashExchangeMachine.Storage.IntegrationTests
         public void Given_Notes_Should_RemoveNotesSuccessfuly()
         {
             var noteRepository = GetNoteRepository();
-            // TODO: may be pass just Currency name ?
             var notesBeforeInsertion = LoadNotes(noteRepository);
 
-            var note = new NoteEntity { Nominal = 1, Currency = Currency, Count = 10 };
+            var note = new NoteShift { Nominal = 1, Currency = Currency, Count = 10 };
             noteRepository.Delete(note);
 
             var notesAfterInsertion = LoadNotes(noteRepository);
@@ -76,7 +74,7 @@ namespace CashExchangeMachine.Storage.IntegrationTests
             return noteRepository;
         }
 
-        private IDictionary<int, NoteEntity> LoadNotes(NoteRepository noteRepository)
+        private IDictionary<int, NoteShift> LoadNotes(NoteRepository noteRepository)
         {
             return noteRepository.Load(CurrencyRegistry.GetCurrency(Currency))
                                                        .ToDictionary(noteEntity => noteEntity.Nominal, 

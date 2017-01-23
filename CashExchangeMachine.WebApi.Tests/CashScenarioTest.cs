@@ -10,10 +10,10 @@ using NUnit.Framework;
 
 namespace CashExchangeMachine.WebApi.Tests
 {
+    // TODO: Expect that tables are initialized
     [TestFixture]
     internal class CashScenarioTest : ScenarioBaseTest
     {
-        // TODO: Now works only if in table exists rows
         [Test]
         public void Given_SetNoMoney_Then_GetAvailableMoney_Should_ReturnNoMoney_With_SuccessStatus()
         {

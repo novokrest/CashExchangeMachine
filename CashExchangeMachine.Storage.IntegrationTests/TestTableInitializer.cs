@@ -24,7 +24,7 @@ namespace CashExchangeMachine.Storage.IntegrationTests
             _scripts = scripts;
         }
 
-        public void Initialize(IEnumerable<IMonetaryAggregateEntity> entities)
+        public void Initialize(IEnumerable<IMonetaryAggregateShift> entities)
         {
             Run(_scripts.RemoveScript());
             Run(_scripts.CreateScript());
