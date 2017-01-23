@@ -1,0 +1,2 @@
+set turn on all warnings
+set treat warnings as errors

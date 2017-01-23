@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace CashExchangeMachine.WebApi.Tests
 {
     [TestFixture]
-    internal class CashControllerScenarioTest : ControllerBaseTest
+    internal class CashScenarioTest : ScenarioBaseTest
     {
         // TODO: Now works only if in table exists rows
         [Test]
