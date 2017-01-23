@@ -2,19 +2,19 @@
 
 
 ## REST API
-###### GET  **/api/cashmachine/money** 
+### GET  **/api/cashmachine/money** 
 Retrieve information about available money in machine
 
-###### POST **/api/cashmachine/money** 
+### POST **/api/cashmachine/money** 
 Set money in machine
 
-###### PUT  **/api/cashmachine/insert/coin**/*nominal* 
+### PUT  **/api/cashmachine/insert/coin**/*nominal* 
 Insert coin with *specified* nominal
 
-###### PUT  **/api/cashmachine/insert/note**/*nominal* 
+### PUT  **/api/cashmachine/insert/note**/*nominal* 
 Insert note with *specified* nominal
 
-###### POST **/api/cashmachine/exchange**
+### POST **/api/cashmachine/exchange**
 Make exchange of inserted money
 
 
