@@ -1,3 +1,7 @@
+USE [master]
+CREATE DATABASE [CashDB]
+GO
+
 USE [CashDB]
 GO
 
@@ -19,14 +23,15 @@ CREATE TABLE [dbo].[Coins]
 )
 GO
 
-INSERT INTO [dbo].[Notes] ([Nominal], [Currency], [Count]) VALUES (1, 'Dollar', 135)
-INSERT INTO [dbo].[Notes] ([Nominal], [Currency], [Count]) VALUES (2, 'Dollar', 443)
-INSERT INTO [dbo].[Notes] ([Nominal], [Currency], [Count]) VALUES (5, 'Dollar', 51)
-INSERT INTO [dbo].[Notes] ([Nominal], [Currency], [Count]) VALUES (10, 'Dollar', 79)
+INSERT INTO [dbo].[Notes] ([Nominal], [Currency], [Count]) VALUES (1, 'Dollar', 0)
+INSERT INTO [dbo].[Notes] ([Nominal], [Currency], [Count]) VALUES (2, 'Dollar', 0)
+INSERT INTO [dbo].[Notes] ([Nominal], [Currency], [Count]) VALUES (5, 'Dollar', 0)
+INSERT INTO [dbo].[Notes] ([Nominal], [Currency], [Count]) VALUES (10, 'Dollar', 0)
 GO
 
-INSERT INTO [dbo].[Coins] ([Nominal], [Currency], [Count]) VALUES (1, 'Dollar', 532)
-INSERT INTO [dbo].[Coins] ([Nominal], [Currency], [Count]) VALUES (5, 'Dollar', 735)
-INSERT INTO [dbo].[Coins] ([Nominal], [Currency], [Count]) VALUES (10, 'Dollar', 344)
-INSERT INTO [dbo].[Coins] ([Nominal], [Currency], [Count]) VALUES (25, 'Dollar', 975)
+INSERT INTO [dbo].[Coins] ([Nominal], [Currency], [Count]) VALUES (1, 'Dollar', 0)
+INSERT INTO [dbo].[Coins] ([Nominal], [Currency], [Count]) VALUES (5, 'Dollar', 0)
+INSERT INTO [dbo].[Coins] ([Nominal], [Currency], [Count]) VALUES (10, 'Dollar', 0)
+INSERT INTO [dbo].[Coins] ([Nominal], [Currency], [Count]) VALUES (25, 'Dollar', 0)
 GO
+
